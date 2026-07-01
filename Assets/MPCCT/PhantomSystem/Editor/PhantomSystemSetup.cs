@@ -315,7 +315,7 @@ namespace MPCCT
                 {
                     EditorGUILayout.HelpBox(T("ExceptionsMessage"), MessageType.Info);
                     exceptionScrollPosition = EditorGUILayout.BeginScrollView(exceptionScrollPosition, GUILayout.Height(100));
-                    for(int i = 0;i < ExceptionParameters.Count; i++)
+                    for (int i = 0; i < ExceptionParameters.Count; i++)
                     {
                         EditorGUILayout.BeginHorizontal();
                         ExceptionParameters[i] = (ModularAvatarParameters)EditorGUILayout.ObjectField(ExceptionParameters[i], typeof(ModularAvatarParameters), true);
@@ -330,7 +330,7 @@ namespace MPCCT
                     EditorGUILayout.Space();
                     EditorGUILayout.LabelField(T("DragMessage"));
                     ModularAvatarParameters newParameter = (ModularAvatarParameters)EditorGUILayout.ObjectField(null, typeof(ModularAvatarParameters), true);
-                    if (newParameter != null && !ExceptionParameters.Contains(newParameter) 
+                    if (newParameter != null && !ExceptionParameters.Contains(newParameter)
                         && newParameter.transform.IsChildOf(PhantomAvatar.transform))
                     {
                         ExceptionParameters.Add(newParameter);
@@ -399,9 +399,9 @@ namespace MPCCT
                         EditorGUILayout.EndScrollView();
                         EditorGUI.indentLevel--;
                     }
-                }    
+                }
             }
-                
+
             // Start button
             EditorGUI.BeginDisabledGroup(validationErrors.Count > 0);
             if (GUILayout.Button(T("StartButton")))
@@ -480,7 +480,7 @@ namespace MPCCT
                 {
                     errors.Add(T("PhantomAvatarAnimatorNotFound"));
                 }
-                else if(!phantomAnimator.isHuman)
+                else if (!phantomAnimator.isHuman)
                 {
                     errors.Add(T("PhantomAvatarAnimatorError"));
                 }
@@ -512,7 +512,7 @@ namespace MPCCT
             var MAComponentList = MAAssembly.GetTypes().Where(t => t.IsSubclassOf(typeof(MonoBehaviour))).ToArray();
             var invalidComponents = new List<Component>();
             var allComponents = avatar.GetComponentsInChildren<Component>(true);
-            foreach(var component in  allComponents)
+            foreach (var component in allComponents)
             {
                 if (component == null) continue; // skip missing scripts
                 // Check if component is on the arvatar root
@@ -539,7 +539,7 @@ namespace MPCCT
             if (avatar == null) return null;
             var phantomSystem = avatar.transform.Find("PhantomSystem");
             if (phantomSystem == null) return null;
-            for (int i = 0;i< phantomSystem.childCount; i++)
+            for (int i = 0; i < phantomSystem.childCount; i++)
             {
                 var child = phantomSystem.GetChild(i);
                 if (child.name == "PhantomSpawnPosition")
@@ -651,11 +651,13 @@ namespace MPCCT
         {
             ctx.PhantomArmature = ctx.PhantomAnimator.GetBoneTransform(HumanBodyBones.Hips).parent;
             ctx.BaseArmature = ctx.BaseAnimator.GetBoneTransform(HumanBodyBones.Hips).parent;
-            ctx.SpawnPosition.position = ctx.BaseArmature.position;
-            ctx.SpawnPosition.rotation = ctx.BaseArmature.rotation;
+            ctx.SpawnPosition.position = BaseAvatar.transform.position;
+            ctx.SpawnPosition.rotation = BaseAvatar.transform.rotation;
 
             GameObject BaseAvatarPosition = new GameObject("BaseAvatarPosition");
             BaseAvatarPosition.transform.parent = ctx.PhantomSystem.transform;
+            BaseAvatarPosition.transform.position = BaseAvatar.transform.position;
+            BaseAvatarPosition.transform.rotation = BaseAvatar.transform.rotation;
             GameObject ArmatureConstraintTarget = new GameObject("AmatureConstraintTarget");
             ArmatureConstraintTarget.transform.parent = BaseAvatarPosition.transform;
 
@@ -671,7 +673,7 @@ namespace MPCCT
             {
                 new VRCConstraintSource
                 {
-                    SourceTransform = ctx.BaseArmature,
+                    SourceTransform = BaseAvatar.transform,
                     Weight = 1f
                 }
             };
@@ -690,9 +692,10 @@ namespace MPCCT
                     Weight = 1f
                 }
             };
-            BaseAvatarPositionConstraint.enabled = true;
+            ArmatureTargetConstraint.enabled = true;
 
             // Add constraint to PhantomAvatarRoot
+            var RootResetRotationOffset = Quaternion.Inverse(ctx.PhantomArmature.rotation) * ctx.PhantomAvatarRoot.transform.rotation;
             var PhantomAvatarConstraint = ctx.PhantomAvatarRoot.AddComponent<VRCParentConstraint>();
             PhantomAvatarConstraint.Locked = true;
             PhantomAvatarConstraint.IsActive = true;
@@ -706,7 +709,9 @@ namespace MPCCT
                 new VRCConstraintSource
                 {
                     SourceTransform = ctx.PhantomArmature,
-                    Weight = 0f
+                    Weight = 0f,
+                    ParentPositionOffset = Vector3.zero,
+                    ParentRotationOffset = RootResetRotationOffset.eulerAngles
                 }
             };
             PhantomAvatarConstraint.enabled = true;
@@ -1167,8 +1172,8 @@ namespace MPCCT
             {
                 case PhantomSystemLocalizationData.Locale.Chinese:
                     {
-                        MAPrefabInstance.GetComponent<ModularAvatarMenuInstaller>().menuToAppend = IsRemovePhantomMenu ? 
-                            AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenu_NoPhantomMenuPath_zh) : 
+                        MAPrefabInstance.GetComponent<ModularAvatarMenuInstaller>().menuToAppend = IsRemovePhantomMenu ?
+                            AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenu_NoPhantomMenuPath_zh) :
                             AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenuPath_zh); ;
                         break;
                     }
@@ -1181,8 +1186,8 @@ namespace MPCCT
                     }
                 case PhantomSystemLocalizationData.Locale.Japanese:
                     {
-                        MAPrefabInstance.GetComponent<ModularAvatarMenuInstaller>().menuToAppend = IsRemovePhantomMenu ? 
-                            AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenu_NoPhantomMenuPath_jp) : 
+                        MAPrefabInstance.GetComponent<ModularAvatarMenuInstaller>().menuToAppend = IsRemovePhantomMenu ?
+                            AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenu_NoPhantomMenuPath_jp) :
                             AssetDatabase.LoadAssetAtPath<VRCExpressionsMenu>(LocalMainMenuPath_jp); ;
                         break;
                     }
@@ -1657,7 +1662,7 @@ namespace MPCCT
                 Debug.LogWarning($"[Phantom System] Cannot rebase the AvatarObjectReference '{obj.referencePath}'.Rebased path '{newPath}' does not exsit.");
                 return obj;
             }
-            newObj.Set(BaseAvatar.transform.Find(newPath).gameObject);  
+            newObj.Set(BaseAvatar.transform.Find(newPath).gameObject);
             return newObj;
         }
 
