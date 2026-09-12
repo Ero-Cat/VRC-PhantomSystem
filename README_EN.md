@@ -1,6 +1,15 @@
 # VRC-PhantomSystem
 [中文](https://github.com/MPCCT/VRC-PhantomSystem/blob/main/README.md)|**English**|[日本語](https://github.com/MPCCT/VRC-PhantomSystem/blob/main/README_JP.md)
 
+> [!NOTE]
+> **The new PhantomSystem (NDMF) is now available for beta testing!**
+>
+> The new version uses NDMF to build automatically and supports independent configuration of multiple phantoms and Humanoid animation conversion. Try it out and share your feedback.
+>
+> **[Visit the beta repository for installation and usage instructions →](https://github.com/MPCCT/VRC-PhantomSystem-NDMF)**
+>
+> The documentation below applies to the legacy version.
+
 PhantomSystem is a tool designed to easily add a "Phantom Avatar" to your VRChat avatar that follows the movements of the base model.
 
 ## ✨ Features

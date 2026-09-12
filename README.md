@@ -1,6 +1,15 @@
 # VRC-PhantomSystem
 **中文**|[English](https://github.com/MPCCT/VRC-PhantomSystem/blob/main/README_EN.md)|[日本語](https://github.com/MPCCT/VRC-PhantomSystem/blob/main/README_JP.md)
 
+> [!NOTE]
+> **新版 PhantomSystem（NDMF）现已开放测试！**
+>
+> 新版采用 NDMF 自动构建，支持多分身独立配置与 Humanoid 动画转换。欢迎体验并反馈问题。
+>
+> **[前往新版测试仓库，查看安装与使用说明 →](https://github.com/MPCCT/VRC-PhantomSystem-NDMF)**
+>
+> 以下文档适用于旧版分身系统。
+
 PhantomSystem是一款用于在VRChat模型中简单地添加一个跟随本体动作的分身模型的工具。
 
 ## ✨功能特色
